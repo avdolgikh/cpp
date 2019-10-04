@@ -8,7 +8,7 @@ using namespace std;
 
 
 void Print(const vector<int>& v) {
-	for (auto& item : v) {
+	for (const auto& item : v) {
 		cout << item << ' ';
 	}
 }
@@ -21,15 +21,25 @@ int main() {
 
 
 	// sort (begin(v), end(v));
-	// Print(v);
+
 
 	// cout << count( begin(v), end(v), 2 );
-	cout << count_if( begin(v), end(v), [](int x) {
-											if (x > 2) {
-												return true;
-											}
-											return false;
-										});
+
+
+	for (auto& i : v) {
+		++i;
+	}
+	Print(v);
+
+//	int thr = 0;
+//	cin >>  thr;
+//
+//	cout << count_if( begin(v), end(v), [thr](int x) {
+//											if (x > thr) {
+//												return true;
+//											}
+//											return false;
+//										});
 
 	return 0;
 }
