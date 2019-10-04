@@ -2,26 +2,34 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
+#include <algorithm>
 using namespace std;
 
-void PrintMap(const map<char, vector<string>>& m) {
-	// cout << "size = " << m.size() << endl;
-	for (const auto& item : m ) {
-		cout << item.first << endl;
-		for (const auto& word : item.second ) {
-			cout << word << " ";
-		}
-		cout << endl;
+
+void Print(const vector<int>& v) {
+	for (auto& item : v) {
+		cout << item << ' ';
 	}
 }
 
+
 int main() {
-	map<int, string> m = {{1, "odd"}, {2, "even"}, {1, "one"}};
-	m[2] = "two";
-	m.erase(1);
-	m[3] = "three";
-	m.erase(4);
-	m[5] = "five";
-	cout << m.size();
+	vector<int> v = {
+		1, 2, 5, 4, 2
+	};
+
+
+	// sort (begin(v), end(v));
+	// Print(v);
+
+	// cout << count( begin(v), end(v), 2 );
+	cout << count_if( begin(v), end(v), [](int x) {
+											if (x > 2) {
+												return true;
+											}
+											return false;
+										});
+
 	return 0;
 }

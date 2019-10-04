@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project>
     	
-    <configuration id="cdt.managedbuild.config.gnu.mingw.exe.debug.684401634" name="Debug">
+    <configuration id="cdt.managedbuild.config.gnu.mingw.exe.debug.1696868611" name="Debug">
         		
         <extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
             			
@@ -23,7 +23,7 @@
         	
     </configuration>
     	
-    <configuration id="cdt.managedbuild.config.gnu.mingw.exe.release.640855341" name="Release">
+    <configuration id="cdt.managedbuild.config.gnu.mingw.exe.release.1652924909" name="Release">
         		
         <extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
             			
