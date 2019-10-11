@@ -6,40 +6,79 @@
 #include <algorithm>
 using namespace std;
 
+struct Lecture {
+	string title = "C++";
+	int duration = 0;
+};
 
-void Print(const vector<int>& v) {
-	for (const auto& item : v) {
-		cout << item << ' ';
+class Route {
+private:
+	static int ComputeDistance(string source, string destination) {
+		return 100;
 	}
+
+	void UpdateLength() {
+		length = ComputeDistance(source, destination);
+		//compute_distance_log.push_back(source + " - " + destination);
+	}
+
+	string source;
+	string destination;
+	int length;
+	//vector<string> compute_distance_log;
+
+public:
+	Route () {
+		source = "Moscow";
+		destination = "S-Pb";
+		UpdateLength();
+		cout << "Default constructed\n" ;
+	}
+	Route (const string& new_source, const string& new_destination) {
+		source = new_source;
+		destination = new_destination;
+		UpdateLength();
+		cout << "Constructed\n" ;
+	}
+	~Route () {
+		cout << "Destructed\n" ;
+//		for (const string& entry : compute_distance_log) {
+//			cout << entry << "\n";
+//		}
+	}
+
+	int GetLength() const {
+		return length;
+	}
+
+	string GetSource() const {
+		return source;
+	}
+
+	string GetDestination() const {
+		return destination;
+	}
+};
+
+
+void PrintRoute(const Route& r) {
+	cout << r.GetLength() << endl;
+	cout << r.GetSource() << endl;
+	cout << r.GetDestination() << endl;
+}
+
+Route GetRoute () {
+	cout << 1 << endl;
+	return {};
+}
+
+void Worthless(Route route) {
+	cout << 2 << endl;
 }
 
 
 int main() {
-	vector<int> v = {
-		1, 2, 5, 4, 2
-	};
-
-
-	// sort (begin(v), end(v));
-
-
-	// cout << count( begin(v), end(v), 2 );
-
-
-	for (auto& i : v) {
-		++i;
-	}
-	Print(v);
-
-//	int thr = 0;
-//	cin >>  thr;
-//
-//	cout << count_if( begin(v), end(v), [thr](int x) {
-//											if (x > thr) {
-//												return true;
-//											}
-//											return false;
-//										});
-
+	GetRoute();
+	cout << 2 << endl;
 	return 0;
 }
