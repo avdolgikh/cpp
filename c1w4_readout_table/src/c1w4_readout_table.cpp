@@ -19,10 +19,35 @@ void Print(const vector<string>& names, const vector<double>& values, int width,
 }
 
 int main() {
-	vector<string> names = { "a", "b", "c" };
-	vector<double> values = { 5, 0.01, 0.000005 };
-	cout << setfill('.');
-	cout << left;
-	Print(names, values, 14, 3);
+	ifstream input("input.txt");
+
+	if (!input) {
+		return 0;
+	}
+
+	int n, m;
+	input >> n;
+	input.ignore(1);
+	input >> m;
+	input.ignore(1);
+
+	string cell;
+
+	for (int i = 0; i < n; ++i) {
+		string cell_delim = " ";
+		for (int j = 0; j < m; ++j) {
+			if (j == m - 1) {
+				cell_delim = "";
+				getline(input, cell);
+			} else {
+				getline(input, cell, ',');
+			}
+			cout << setw(10) << cell << cell_delim;
+		}
+		if (i < n-1) {
+			cout << endl;
+		}
+	}
+
 	return 0;
 }
