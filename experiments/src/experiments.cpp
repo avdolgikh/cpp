@@ -6,6 +6,8 @@
 #include <algorithm>
 using namespace std;
 
+
+
 struct Duration {
 	int hour;
 	int min;
@@ -48,19 +50,59 @@ void PrintVector(const vector<Duration>& dur) {
 	cout << endl;
 }
 
+
+struct Date {
+	int year;
+	int month;
+	int day;
+};
+
+void EnsureNextSymbol (stringstream& stream) {
+	if (stream.peek() != '/') {
+		stringstream ss;
+		ss << "expected /, but has: " << char(stream.peek());
+		throw runtime_error(ss.str());
+	}
+	stream.ignore(1);
+}
+
+Date ParseDate (const string& s) {
+	stringstream stream(s);
+	Date date;
+	stream >> date.year;
+	EnsureNextSymbol(stream);
+	stream >> date.month;
+	EnsureNextSymbol(stream);
+	stream >> date.day;
+	return date;
+}
+
 int main() {
-	stringstream dur_ss("02:50");
-	Duration dur1;
-	dur_ss >> dur1;
-	Duration dur2 = { 0, 35 };
-	Duration dur3 = dur1 + dur2;
+	string date_str = "2017/01b25";
 
-	vector<Duration> v {
-		dur3, dur1, dur2
-	};
+	try {
+		Date date = ParseDate(date_str);
+		cout << setw(2) << setfill('0') << date.day << '.'
+		 << setw(2) << setfill('0') << date.month << '.'
+		 << date.year << endl;
+	} catch (exception& ex) {
+		cout << "Exception: " << ex.what();
+	}
 
-	PrintVector(v);
-	sort(begin(v), end(v));
-	PrintVector(v);
+
+
+//	stringstream dur_ss("02:50");
+//	Duration dur1;
+//	dur_ss >> dur1;
+//	Duration dur2 = { 0, 35 };
+//	Duration dur3 = dur1 + dur2;
+//
+//	vector<Duration> v {
+//		dur3, dur1, dur2
+//	};
+//
+//	PrintVector(v);
+//	sort(begin(v), end(v));
+//	PrintVector(v);
 	return 0;
 }
