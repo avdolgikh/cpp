@@ -23,15 +23,31 @@ public:
 
   // "year-month-day" (string)
   friend istream& operator >> (istream& stream, Date& date) {
+
+	  // Wrong date format: DATE
+
   	stream >> date.year;
-  	stream.ignore(1);
+  	stream.ignore(1); // check that it is particullarly '-'
+
   	stream >> date.month;
+  	//Month value is invalid: MONTH
+  	// string error = "Month value is invalid: " + to_string(month);
+
   	stream.ignore(1);
   	stream >> date.day;
+  	// Day value is invalid: DAY
+
 //	if () {
 //		throw invalid_argument("...");
 //	}
   	return stream;
+  }
+
+  friend ostream& operator << (ostream& stream, const Date& date) {
+	  stream << setw(4) << setfill('0') << date.year << '-'
+	  		 << setw(2) << setfill('0') << date.month << '-'
+			 << setw(2) << setfill('0') << date.day;
+	  return stream;
   }
 
   friend bool operator < (const Date& lhs, const Date& rhs) {
@@ -60,27 +76,48 @@ public:
 		}
 		data[date].insert(event);
 		// ignore similar event for a one date
-		cout << data.size() << " " << data[date].size() << endl;
+		//cout << data.size() << " " << data[date].size() << endl;
 	}
 
 	bool DeleteEvent(const Date& date, const string& event) {
 		if (data.count(date) > 0) {
 			if (data[date].count(event)) {
 				data[date].erase(event);
-
-				// TODO: if data[date].size() == 0 => call DeleteDate()
-
-				cout << data.size() << " " << data[date].size() << endl;
+				if (data[date].size() == 0) {
+					DeleteDate(date);
+				}
+				//cout << data.size() << " " << data[date].size() << endl;
 				return true;
 			}
 		}
-		cout << data.size() << " " << data[date].size() << endl;
+		//cout << data.size() << " " << data[date].size() << endl;
 		return false;
 	}
 
-	int  DeleteDate(const Date& date);
-	void /*bool ?*/ Find(const Date& date) const;
-	void Print() const;
+	int  DeleteDate(const Date& date) {
+		int n = 0;
+		if (data.count(date) > 0) {
+			n = data[date].size();
+			//data[date].clear();
+			data.erase(date);
+		}
+		return n;
+	}
+
+	set<string> Find(const Date& date) const {
+		// is 'set<string>' already sorted alphabetically?
+		return data.at(date);
+	}
+
+	void Print() const {
+		// 'map' must be already sorted! (sort by date)
+		// 'set<string>' must be already sorted? (sort alphabetically)
+		for (const auto& date : data) {
+			for (const auto& event : date.second) {
+				cout << date.first << " " << event << endl;
+			}
+		}
+	}
 
 private:
 	map<Date, set<string>> data;
@@ -91,34 +128,25 @@ void ParseCommand(stringstream& stream, Date& date, string& event) {
 	stream >> date;
 	//cout << date.GetDay() << endl;
 
-	stream.ignore(1); // or more?
-	stream >> event;
-	//cout << event << endl;
+	event = "";
+
+	if (stream.peek() != '\n') {
+		stream.ignore(1); // or more?
+		stream >> event;
+		//cout << event << endl;
+	}
 }
 
 int main() {
 	Database db;
 	string command;
 
-	// Commands:
-	// Add Date Event
-	// Del Date Event
-	// Del Date
-	// Find Date
-	// Print
-	// !!! ignore empty strings!
-
 	string operation;
 	Date date;
 	string event;
 
-	// while (true)
 	while (getline(cin, command)) {
-
-		//cout << '"' << command << '"' << endl;
-
 		if (command == "") {
-			//cout << "Command is empty!" << endl;
 			continue;
 		}
 
@@ -133,14 +161,32 @@ int main() {
 
 		} else if (operation == "Del") {
 			ParseCommand(stream, date, event);
-			db.DeleteEvent(date, event);
-//		} else if (command == "Find") {
-//			db.Find();
-//		} else if (command == "Print") {
-//			db.Find();
+
+			if (event != "") {
+				if (db.DeleteEvent(date, event)) {
+					cout << "Deleted successfully" << endl;
+				} else {
+					cout << "Event not found" << endl;
+				}
+			} else {
+				int n = db.DeleteDate(date);
+				cout << "Deleted " << n << " events" << endl;
+			}
+
+		} else if (operation == "Find") {
+			ParseCommand(stream, date, event);
+			auto events =  db.Find(date);
+			if (events.size() > 0) {
+				for (const auto& e : events) {
+					cout << e << endl;
+				}
+			}
+
+		} else if (operation == "Print") {
+			db.Print();
+
 		} else {
-			// unknown command
-			cout << "Unknown command" << endl;
+			cout << "Unknown command: " << operation << endl;
 		}
 	}
 	return 0;
